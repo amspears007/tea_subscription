@@ -4,7 +4,8 @@ RSpec.describe "Create a new subscription" do
   before(:each) do
     @customer1 = Customer.create!(first_name: 'Amy', last_name: 'Spears', email: 'amers123@gmail.com', address: '123 street, denver, CO, 80028')
     @tea1 = Tea.create!(title: 'Earl Grey', temperature: 'boiling', brew_time: '4-6 minutes')
-    
+    @sub1 = Subscription.create!(title: "Super Fun Tea", price: 11.99, status: "inactive", frequency: "bi-weekly", customer_id: @customer1.id, tea_id: @tea1.id)
+
   end
   describe "happy paths" do
     it "can create a subscription with a customer and tea id" do
@@ -23,7 +24,7 @@ RSpec.describe "Create a new subscription" do
         expect(response).to be_successful
         expect(response.status).to eq(201)
         subscription = JSON.parse(response.body, symbolize_names: true)
-# require 'pry'; binding.pry
+require 'pry'; binding.pry
         expect(subscription).to be_a(Hash)
       end
     end
