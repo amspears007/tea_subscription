@@ -24,8 +24,17 @@ RSpec.describe "Create a new subscription" do
         expect(response).to be_successful
         expect(response.status).to eq(201)
         subscription = JSON.parse(response.body, symbolize_names: true)
-require 'pry'; binding.pry
+# require 'pry'; binding.pry
         expect(subscription).to be_a(Hash)
+        expect(subscription[:data]).to have_key(:type)
+        expect(subscription[:data]).to have_key(:id)
+        expect(subscription[:data]).to have_key(:attributes)
+        expect(subscription[:data][:id]).to be_an(String)
+
+        expect(subscription[:data][:attributes].count).to eq(6)
+        expect(subscription[:data][:attributes]).to have_key(:title)
+        expect(subscription[:data][:attributes]).to have_key(:price)
+        expect(subscription[:data][:attributes][:price]).to be_a(Float)
       end
     end
   end
