@@ -15,7 +15,7 @@ RSpec.describe "it returns all subscriptions" do
       get "/api/v1/customers/#{@customer1.id}/subscriptions"
 
       expect(response).to be_successful
-      expect(response.status).to eq(201)
+      expect(response.status).to eq(200)
       subscription = JSON.parse(response.body, symbolize_names: true)
       expect(subscription).to be_a(Hash)
     end
