@@ -14,6 +14,23 @@ Tea Subscription is a Ruby on Rails back-end application that exposes API's.  It
 
 ## How To Install
 
+_Follow the steps below to install and set up this app._
+
+1. Clone this Repository
+   ```sh
+   git clone git@github.com:amspears007/tea_subscription.git
+   ```
+2. In your terminal, run the following commands;
+    ```sh
+    bundle install
+    rails db:{drop,create,migrate,seed}
+    ```
+
+    <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<br />
+
+
 ## Endpoints
 
 ## Tech Stack
