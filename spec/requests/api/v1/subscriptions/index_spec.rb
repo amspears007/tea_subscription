@@ -9,10 +9,9 @@ RSpec.describe "it returns and updates subscriptions" do
     @sub2 = Subscription.create!(title: "Monthly Tea", price: 10.00, status: "active", frequency: "monthly", customer_id: @customer1.id, tea_id: @tea2.id)
     @sub3 = Subscription.create!(title: "Tea, Tea, Tea", price: 12.50, status: "active", frequency: "weekly", customer_id: @customer1.id, tea_id: @tea1.id)
   end
-  describe "happy paths" do
+  describe "happy paths for getting all subscriptions" do
     it "returns all valid subscriptions" do
       get "/api/v1/customers/#{@customer1.id}/subscriptions"
-      # require 'pry'; binding.pry
 
       expect(response).to be_successful
       expect(response.status).to eq(200)
@@ -36,7 +35,7 @@ RSpec.describe "it returns and updates subscriptions" do
     end
   end
 
-  describe "sad paths" do
+  describe "sad paths for getting all subscriptions" do
     it "returns an error message" do
       get "/api/v1/customers/99/subscriptions"
 
@@ -46,6 +45,39 @@ RSpec.describe "it returns and updates subscriptions" do
       expect(bad_subs).to be_a(Hash)
       expect(bad_subs).to have_key(:error)
       expect(bad_subs[:error]).to eq('Customer must exist')
+    end
+  end
+
+  describe "an endpoint to cancel a customers subscription" do
+    it "changes status to inactive" do
+      sub_params = {
+        status: "inactive",
+      }
+      patch "/api/v1/customers/#{@customer1.id}/subscriptions/#{@sub3.id}", params: sub_params
+
+      expect(response).to be_successful
+      expect(response.status).to eq(201)
+      subscription = JSON.parse(response.body, symbolize_names: true)
+      expect(subscription).to be_a(Hash)
+      expect(subscription).to have_key(:data)
+      expect(subscription[:data]).to be_a(Hash)
+      expect(subscription[:data]).to have_key(:attributes)
+      expect(subscription[:data][:attributes].count).to eq(6)
+      expect(subscription[:data][:attributes][:status]).to eq("inactive")
+    end
+  end
+
+  describe "SAD PATH an endpoint to cancel a customers subscription" do
+    xit "changes status to inactive" do
+      sub_params = {
+        status: ""
+      }
+      patch "/api/v1/customers/#{@customer1.id}/subscriptions/#{@sub3.id}", params: sub_params
+
+      # expect(response).to_not be_successful
+      expect(response.status).to eq(400)
+      subscription = JSON.parse(response.body, symbolize_names: true)
+      expect(subscription).to be_a(Hash)
     end
   end
 end
