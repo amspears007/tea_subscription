@@ -1,4 +1,14 @@
 class Api::V1::Customers::SubscriptionsController < ApplicationController
+  def index
+    customer = Customer.find_by(id: params[:customer_id])
+    if customer.nil?
+      render json: { error: 'Customer must exist' }, status: 401
+    else
+      customer_subs = customer.subscriptions
+      render json: SubscriptionsSerializer.new(customer_subs)
+    end
+  end
+
   def create
     new_sub = Subscription.new(subscription_params)
     if new_sub.save
