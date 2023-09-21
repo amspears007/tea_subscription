@@ -66,4 +66,18 @@ RSpec.describe "it returns and updates subscriptions" do
       expect(subscription[:data][:attributes][:status]).to eq("inactive")
     end
   end
+
+  describe "SAD PATH an endpoint to cancel a customers subscription" do
+    xit "changes status to inactive" do
+      sub_params = {
+        status: ""
+      }
+      patch "/api/v1/customers/#{@customer1.id}/subscriptions/#{@sub3.id}", params: sub_params
+
+      # expect(response).to_not be_successful
+      expect(response.status).to eq(400)
+      subscription = JSON.parse(response.body, symbolize_names: true)
+      expect(subscription).to be_a(Hash)
+    end
+  end
 end
