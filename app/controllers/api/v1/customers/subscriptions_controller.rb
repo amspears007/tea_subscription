@@ -1,8 +1,8 @@
 class Api::V1::Customers::SubscriptionsController < ApplicationController
   def index
-    customer = Customer.find(params[:customer_id])
+    customer = Customer.find_by(id: params[:customer_id])
     if customer.nil?
-      render json: { error: 'Invalid API key' }, status: 401
+      render json: { error: 'Customer must exist' }, status: 401
     else
       customer_subs = customer.subscriptions
       render json: SubscriptionsSerializer.new(customer_subs)
