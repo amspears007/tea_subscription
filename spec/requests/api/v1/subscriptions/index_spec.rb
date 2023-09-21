@@ -50,21 +50,20 @@ RSpec.describe "it returns and updates subscriptions" do
 
   describe "an endpoint to cancel a customers subscription" do
     it "changes status to inactive" do
-      patch "/api/v1/customers/#{@customer1.id}/subscriptions/#{@sub3.id}"
-
-      subscription_params = {
-        title: "Tea, Tea, Tea",
-        price: 12.50,
+      sub_params = {
         status: "inactive",
-        frequency: "weekly",
-        customer_id: @customer1.id,
-        tea_id: @tea1.id
-        }
+      }
+      patch "/api/v1/customers/#{@customer1.id}/subscriptions/#{@sub3.id}", params: sub_params
 
       expect(response).to be_successful
       expect(response.status).to eq(201)
       subscription = JSON.parse(response.body, symbolize_names: true)
       expect(subscription).to be_a(Hash)
+      expect(subscription).to have_key(:data)
+      expect(subscription[:data]).to be_a(Hash)
+      expect(subscription[:data]).to have_key(:attributes)
+      expect(subscription[:data][:attributes].count).to eq(6)
+      expect(subscription[:data][:attributes][:status]).to eq("inactive")
     end
   end
 end
